@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getUserId } from './userId'
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api'
+const API_BASE = "https://ai-metadata-catalog.onrender.com"
 
 const api = axios.create({
   baseURL: API_BASE,
