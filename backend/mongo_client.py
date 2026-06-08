@@ -25,10 +25,13 @@ def get_db():
     """Returns the MongoDB database instance, lazily connecting on first call."""
     global _client
     if _client is None:
+        kwargs={
+            "tls":True,
+            "tlsAllowInvalidCertificates": True,
+        }
         if ca:
-            _client = MongoClient(MONGODB_URI, tlsCAFile=ca)
-        else:
-            _client = MongoClient(MONGODB_URI)
+            kwargs["tlsCAFile"]=ca
+        _client = MongoClient(MONGODB_URI, **kwargs)
     return _client["metadata_catalog"]
 
 
