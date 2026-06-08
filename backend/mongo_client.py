@@ -8,6 +8,12 @@ from uuid import uuid4
 from pymongo import MongoClient, DESCENDING
 from dotenv import load_dotenv
 
+try:
+    import certifi
+    ca = certifi.where()
+except ImportError:
+    ca = None
+
 load_dotenv()
 
 MONGODB_URI = os.getenv("MONGODB_URI")
@@ -19,7 +25,10 @@ def get_db():
     """Returns the MongoDB database instance, lazily connecting on first call."""
     global _client
     if _client is None:
-        _client = MongoClient(MONGODB_URI)
+        if ca:
+            _client = MongoClient(MONGODB_URI, tlsCAFile=ca)
+        else:
+            _client = MongoClient(MONGODB_URI)
     return _client["metadata_catalog"]
 
 
